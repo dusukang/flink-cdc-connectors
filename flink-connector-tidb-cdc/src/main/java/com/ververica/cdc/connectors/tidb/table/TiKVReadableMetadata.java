@@ -90,7 +90,7 @@ public class TiKVReadableMetadata {
     public static TiKVReadableMetadata createOpTsMetadata() {
         return new TiKVReadableMetadata(
                 "op_ts",
-                DataTypes.TIMESTAMP_LTZ(3).notNull(),
+                DataTypes.TIMESTAMP_WITH_LOCAL_TIME_ZONE(3).notNull(),
                 new TiKVMetadataConverter() {
                     private static final long serialVersionUID = 1L;
 

@@ -46,7 +46,8 @@ public class TiKVAppendMetadataCollector implements Collector<RowData>, Serializ
             Object meta = metadataConverters[i].read(row);
             metaRow.setField(i, meta);
         }
-        RowData outRow = new JoinedRowData(physicalRow.getRowKind(), physicalRow, metaRow);
+        RowData outRow = new JoinedRowData(physicalRow, metaRow);
+        outRow.setRowKind(physicalRow.getRowKind());
         outputCollector.collect(outRow);
     }
 

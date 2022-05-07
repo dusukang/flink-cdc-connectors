@@ -23,7 +23,6 @@ import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.table.planner.factories.TestValuesTableFactory;
-import org.apache.flink.table.utils.LegacyRowResource;
 
 import com.ververica.cdc.connectors.sqlserver.SqlServerTestBase;
 import org.junit.Before;
@@ -52,8 +51,6 @@ public class SqlServerConnectorITCase extends SqlServerTestBase {
             StreamTableEnvironment.create(
                     env,
                     EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build());
-
-    @ClassRule public static LegacyRowResource usesLegacyRows = LegacyRowResource.INSTANCE;
 
     @Before
     public void before() {

@@ -61,7 +61,7 @@ under the License.
             <artifactId>flink-connector-mysql-cdc</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>
-            <scope>test</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.ververica</groupId>
@@ -103,7 +103,7 @@ under the License.
             <groupId>org.testcontainers</groupId>
             <artifactId>mysql</artifactId>
             <version>${testcontainers.version}</version>
-            <scope>test</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>

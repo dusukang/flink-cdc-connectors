@@ -42,6 +42,11 @@ public class MySqlE2eITCase extends FlinkContainerTestEnvironment {
     private static final Path mysqlCdcJar = TestUtils.getResource("mysql-cdc-connector.jar");
 
     @Test
+    public void testPrint(){
+        System.out.println("hello world");
+    }
+
+    @Test
     public void testMySqlCDC() throws Exception {
         List<String> sqlLines =
                 Arrays.asList(

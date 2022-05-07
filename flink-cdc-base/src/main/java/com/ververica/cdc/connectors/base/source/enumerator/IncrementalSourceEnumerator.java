@@ -110,6 +110,7 @@ public class IncrementalSourceEnumerator
         // do nothing
     }
 
+
     @Override
     public void handleSourceEvent(int subtaskId, SourceEvent sourceEvent) {
         if (sourceEvent instanceof FinishedSnapshotSplitsReportEvent) {
@@ -134,8 +135,8 @@ public class IncrementalSourceEnumerator
     }
 
     @Override
-    public PendingSplitsState snapshotState(long checkpointId) {
-        return splitAssigner.snapshotState(checkpointId);
+    public PendingSplitsState snapshotState() {
+        return splitAssigner.snapshotState(-1L);
     }
 
     @Override

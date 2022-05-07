@@ -23,12 +23,10 @@ import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.table.planner.factories.TestValuesTableFactory;
-import org.apache.flink.table.utils.LegacyRowResource;
 import org.apache.flink.util.ExceptionUtils;
 
 import com.ververica.cdc.connectors.postgres.PostgresTestBase;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -54,8 +52,6 @@ public class PostgreSQLConnectorITCase extends PostgresTestBase {
             StreamTableEnvironment.create(
                     env,
                     EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build());
-
-    @ClassRule public static LegacyRowResource usesLegacyRows = LegacyRowResource.INSTANCE;
 
     @Before
     public void before() {

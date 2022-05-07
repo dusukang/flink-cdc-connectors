@@ -19,7 +19,7 @@
 package com.ververica.cdc.connectors.oceanbase.table;
 
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.table.catalog.ResolvedSchema;
+import org.apache.flink.table.api.TableSchema;
 import org.apache.flink.table.connector.ChangelogMode;
 import org.apache.flink.table.connector.source.DynamicTableSource;
 import org.apache.flink.table.connector.source.ScanTableSource;
@@ -49,7 +49,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 /** A {@link DynamicTableSource} implementation for OceanBase. */
 public class OceanBaseTableSource implements ScanTableSource, SupportsReadingMetadata {
 
-    private final ResolvedSchema physicalSchema;
+    private final TableSchema physicalSchema;
 
     private final StartupMode startupMode;
     private final Long startupTimestamp;
@@ -79,7 +79,7 @@ public class OceanBaseTableSource implements ScanTableSource, SupportsReadingMet
     protected List<String> metadataKeys;
 
     public OceanBaseTableSource(
-            ResolvedSchema physicalSchema,
+            TableSchema physicalSchema,
             StartupMode startupMode,
             Long startupTimestamp,
             String username,

@@ -19,23 +19,39 @@
 package com.ververica.cdc.debezium.utils;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.table.catalog.Column;
-import org.apache.flink.table.catalog.ResolvedSchema;
+import org.apache.flink.table.api.TableColumn;
+import org.apache.flink.table.api.TableSchema;
+import org.apache.flink.table.api.WatermarkSpec;
+import org.apache.flink.table.api.constraints.UniqueConstraint;
 
-import java.util.stream.Collectors;
 
-/** Utilities to {@link ResolvedSchema}. */
+import java.util.List;
+
+/**
+ * Utilities to {@link TableSchema}.
+ */
 @Internal
 public class ResolvedSchemaUtils {
-    private ResolvedSchemaUtils() {}
+    private ResolvedSchemaUtils() {
+    }
 
-    /** Return {@link ResolvedSchema} which consists of all physical columns. */
-    public static ResolvedSchema getPhysicalSchema(ResolvedSchema resolvedSchema) {
-        return new ResolvedSchema(
-                resolvedSchema.getColumns().stream()
-                        .filter(Column::isPhysical)
-                        .collect(Collectors.toList()),
-                resolvedSchema.getWatermarkSpecs(),
-                resolvedSchema.getPrimaryKey().orElse(null));
+    /**
+     * Return {@link TableSchema} which consists of all physical columns.
+     */
+    public static TableSchema getPhysicalSchema(TableSchema tableSchema) {
+
+        WatermarkSpec watermarkSpec = tableSchema.getWatermarkSpecs().get(0);
+        UniqueConstraint uniqueConstraint = tableSchema.getPrimaryKey().orElse(null);
+        String primaryKeyName = uniqueConstraint.getName();
+        List<String> columnList = uniqueConstraint.getColumns();
+        String[] columnArr = columnList.toArray(new String[columnList.size()]);
+        TableSchema.Builder builder = TableSchema.builder()
+                .watermark(watermarkSpec)
+                .primaryKey(primaryKeyName, columnArr);
+        tableSchema.getTableColumns().stream()
+                .filter(TableColumn::isPhysical)
+                .map(item->builder.add(item));
+
+        return builder.build();
     }
 }

@@ -49,7 +49,8 @@ public final class AppendMetadataCollector implements Collector<RowData>, Serial
             Object meta = metadataConverters[i].read(inputRecord);
             metaRow.setField(i, meta);
         }
-        RowData outRow = new JoinedRowData(physicalRow.getRowKind(), physicalRow, metaRow);
+        RowData outRow = new JoinedRowData(physicalRow, metaRow);
+        outRow.setRowKind(physicalRow.getRowKind());
         outputCollector.collect(outRow);
     }
 

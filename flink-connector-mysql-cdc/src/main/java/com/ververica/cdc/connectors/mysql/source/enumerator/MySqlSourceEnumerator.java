@@ -169,8 +169,8 @@ public class MySqlSourceEnumerator implements SplitEnumerator<MySqlSplit, Pendin
     }
 
     @Override
-    public PendingSplitsState snapshotState(long checkpointId) {
-        return splitAssigner.snapshotState(checkpointId);
+    public PendingSplitsState snapshotState() {
+        return splitAssigner.snapshotState(-1L);
     }
 
     @Override

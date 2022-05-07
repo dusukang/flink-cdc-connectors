@@ -26,12 +26,10 @@ import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.table.planner.factories.TestValuesTableFactory;
-import org.apache.flink.table.utils.LegacyRowResource;
 import org.apache.flink.test.util.MiniClusterWithClientResource;
 
 import com.ververica.cdc.connectors.oceanbase.OceanBaseTestBase;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -58,7 +56,7 @@ public class OceanBaseConnectorITCase extends OceanBaseTestBase {
                     env,
                     EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build());
 
-    @ClassRule public static LegacyRowResource usesLegacyRows = LegacyRowResource.INSTANCE;
+//    @ClassRule public static LegacyRowResource usesLegacyRows = LegacyRowResource.INSTANCE;
 
     @Rule
     public final MiniClusterWithClientResource miniClusterResource =

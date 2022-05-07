@@ -83,6 +83,7 @@ public class JsonDebeziumDeserializationSchema implements DebeziumDeserializatio
         if (customConverterConfigs != null) {
             configs.putAll(customConverterConfigs);
         }
+//        configs.put("decimal.format","NUMERIC");
         jsonConverter.configure(configs);
     }
 

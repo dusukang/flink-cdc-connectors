@@ -94,7 +94,7 @@ public final class RowDataDebeziumDeserializeSchema
         return new Builder();
     }
 
-    RowDataDebeziumDeserializeSchema(
+    public RowDataDebeziumDeserializeSchema(
             RowType physicalDataType,
             MetadataConverter[] metadataConverters,
             TypeInformation<RowData> resultTypeInfo,

@@ -19,7 +19,7 @@
 package com.ververica.cdc.connectors.tidb.table;
 
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.table.catalog.ResolvedSchema;
+import org.apache.flink.table.api.TableSchema;
 import org.apache.flink.table.connector.ChangelogMode;
 import org.apache.flink.table.connector.source.DynamicTableSource;
 import org.apache.flink.table.connector.source.ScanTableSource;
@@ -49,7 +49,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  */
 public class TiDBTableSource implements ScanTableSource, SupportsReadingMetadata {
 
-    private final ResolvedSchema physicalSchema;
+    private final TableSchema physicalSchema;
     private final String database;
     private final String tableName;
     private final String pdAddresses;
@@ -67,7 +67,7 @@ public class TiDBTableSource implements ScanTableSource, SupportsReadingMetadata
     protected List<String> metadataKeys;
 
     public TiDBTableSource(
-            ResolvedSchema physicalSchema,
+            TableSchema physicalSchema,
             String database,
             String tableName,
             String pdAddresses,

@@ -20,8 +20,8 @@ package com.ververica.cdc.connectors.tidb.table;
 
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.ReadableConfig;
+import org.apache.flink.table.api.TableSchema;
 import org.apache.flink.table.api.ValidationException;
-import org.apache.flink.table.catalog.ResolvedSchema;
 import org.apache.flink.table.connector.source.DynamicTableSource;
 import org.apache.flink.table.factories.DynamicTableSourceFactory;
 import org.apache.flink.table.factories.FactoryUtil;
@@ -56,8 +56,8 @@ public class TiDBTableSourceFactory implements DynamicTableSourceFactory {
         String tableName = config.get(TABLE_NAME);
         String pdAddresses = config.get(PD_ADDRESSES);
         StartupOptions startupOptions = getStartupOptions(config);
-        ResolvedSchema physicalSchema =
-                getPhysicalSchema(context.getCatalogTable().getResolvedSchema());
+        TableSchema physicalSchema =
+                getPhysicalSchema(context.getCatalogTable().getSchema());
 
         return new TiDBTableSource(
                 physicalSchema,

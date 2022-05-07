@@ -19,7 +19,7 @@
 package com.ververica.cdc.connectors.mongodb.table;
 
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.table.catalog.ResolvedSchema;
+import org.apache.flink.table.api.TableSchema;
 import org.apache.flink.table.connector.ChangelogMode;
 import org.apache.flink.table.connector.source.DynamicTableSource;
 import org.apache.flink.table.connector.source.ScanTableSource;
@@ -58,7 +58,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  */
 public class MongoDBTableSource implements ScanTableSource, SupportsReadingMetadata {
 
-    private final ResolvedSchema physicalSchema;
+    private final TableSchema physicalSchema;
     private final String hosts;
     private final String connectionOptions;
     private final String username;
@@ -87,7 +87,7 @@ public class MongoDBTableSource implements ScanTableSource, SupportsReadingMetad
     protected List<String> metadataKeys;
 
     public MongoDBTableSource(
-            ResolvedSchema physicalSchema,
+            TableSchema physicalSchema,
             String hosts,
             @Nullable String username,
             @Nullable String password,

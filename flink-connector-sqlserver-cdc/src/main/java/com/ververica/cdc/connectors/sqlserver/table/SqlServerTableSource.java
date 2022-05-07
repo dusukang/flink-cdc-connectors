@@ -19,7 +19,7 @@
 package com.ververica.cdc.connectors.sqlserver.table;
 
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.table.catalog.ResolvedSchema;
+import org.apache.flink.table.api.TableSchema;
 import org.apache.flink.table.connector.ChangelogMode;
 import org.apache.flink.table.connector.source.DynamicTableSource;
 import org.apache.flink.table.connector.source.ScanTableSource;
@@ -53,7 +53,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  */
 public class SqlServerTableSource implements ScanTableSource, SupportsReadingMetadata {
 
-    private final ResolvedSchema physicalSchema;
+    private final TableSchema physicalSchema;
     private final int port;
     private final String hostname;
     private final String database;
@@ -76,7 +76,7 @@ public class SqlServerTableSource implements ScanTableSource, SupportsReadingMet
     protected List<String> metadataKeys;
 
     public SqlServerTableSource(
-            ResolvedSchema physicalSchema,
+            TableSchema physicalSchema,
             int port,
             String hostname,
             String database,

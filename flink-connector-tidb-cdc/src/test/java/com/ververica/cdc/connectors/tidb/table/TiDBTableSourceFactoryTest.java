@@ -20,21 +20,15 @@ package com.ververica.cdc.connectors.tidb.table;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.table.api.DataTypes;
-import org.apache.flink.table.api.Schema;
-import org.apache.flink.table.catalog.CatalogTable;
-import org.apache.flink.table.catalog.Column;
+import org.apache.flink.table.api.TableColumn;
+import org.apache.flink.table.api.TableSchema;
+import org.apache.flink.table.catalog.CatalogTableImpl;
 import org.apache.flink.table.catalog.ObjectIdentifier;
-import org.apache.flink.table.catalog.ResolvedCatalogTable;
-import org.apache.flink.table.catalog.ResolvedSchema;
-import org.apache.flink.table.catalog.UniqueConstraint;
 import org.apache.flink.table.connector.source.DynamicTableSource;
 import org.apache.flink.table.factories.FactoryUtil;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,30 +37,27 @@ import static org.junit.Assert.assertEquals;
 /** Unit tests for TiDB table source factory. */
 public class TiDBTableSourceFactoryTest {
 
-    private static final ResolvedSchema SCHEMA =
-            new ResolvedSchema(
-                    Arrays.asList(
-                            Column.physical("aaa", DataTypes.INT().notNull()),
-                            Column.physical("bbb", DataTypes.STRING().notNull()),
-                            Column.physical("ccc", DataTypes.DOUBLE()),
-                            Column.physical("ddd", DataTypes.DECIMAL(31, 18)),
-                            Column.physical("eee", DataTypes.TIMESTAMP(3))),
-                    new ArrayList<>(),
-                    UniqueConstraint.primaryKey("pk", Arrays.asList("bbb", "aaa")));
+    private static final TableSchema SCHEMA = TableSchema.builder()
+            .add(TableColumn.computed("aaa", DataTypes.INT().notNull(),"aaa"))
+            .add(TableColumn.computed("bbb", DataTypes.STRING().notNull(),"bbb"))
+            .add(TableColumn.computed("ccc", DataTypes.DOUBLE(),"ccc"))
+            .add(TableColumn.computed("ddd", DataTypes.DECIMAL(31,18).notNull(),"ddd"))
+            .add(TableColumn.computed("eee", DataTypes.TIMESTAMP(3),"eee"))
+            .watermark(null)
+            .primaryKey("pk",new String[]{"bbb", "aaa"})
+            .build();
 
-    private static final ResolvedSchema SCHEMA_WITH_METADATA =
-            new ResolvedSchema(
-                    Arrays.asList(
-                            Column.physical("id", DataTypes.BIGINT().notNull()),
-                            Column.physical("name", DataTypes.STRING()),
-                            Column.physical("count", DataTypes.DECIMAL(38, 18)),
-                            Column.metadata("time", DataTypes.TIMESTAMP_LTZ(3), "op_ts", true),
-                            Column.metadata(
-                                    "database_name", DataTypes.STRING(), "database_name", true),
-                            Column.metadata("table_name", DataTypes.STRING(), "table_name", true),
-                            Column.metadata("op_ts", DataTypes.TIMESTAMP(), "op_ts", true)),
-                    Collections.emptyList(),
-                    UniqueConstraint.primaryKey("pk", Collections.singletonList("id")));
+    private static final TableSchema SCHEMA_WITH_METADATA = TableSchema.builder()
+            .add(TableColumn.computed("id", DataTypes.BIGINT().notNull(),"id"))
+            .add(TableColumn.computed("name", DataTypes.STRING().notNull(),"name"))
+            .add(TableColumn.computed("count", DataTypes.DECIMAL(38, 18),"count"))
+            .add(TableColumn.metadata("time", DataTypes.TIMESTAMP_WITH_LOCAL_TIME_ZONE(3),"op_ts",true))
+            .add(TableColumn.metadata("database_name", DataTypes.STRING(),"database_name",true))
+            .add(TableColumn.metadata("table_name", DataTypes.STRING(),"table_name",true))
+            .add(TableColumn.metadata("op_ts", DataTypes.TIMESTAMP(),"op_ts",true))
+            .watermark(null)
+            .primaryKey("pk",new String[]{"id"})
+            .build();
 
     private static final String MY_HOSTNAME = "tidb0:4000";
     private static final String MY_DATABASE = "inventory";
@@ -133,17 +124,11 @@ public class TiDBTableSourceFactoryTest {
     }
 
     private static DynamicTableSource createTableSource(
-            ResolvedSchema schema, Map<String, String> options) {
+            TableSchema schema, Map<String, String> options) {
         return FactoryUtil.createTableSource(
                 null,
                 ObjectIdentifier.of("default", "default", "t1"),
-                new ResolvedCatalogTable(
-                        CatalogTable.of(
-                                Schema.newBuilder().fromResolvedSchema(schema).build(),
-                                "mock source",
-                                new ArrayList<>(),
-                                options),
-                        schema),
+                new CatalogTableImpl(schema,options,"catalogTableImpl"),
                 new Configuration(),
                 TiDBTableSourceFactoryTest.class.getClassLoader(),
                 false);

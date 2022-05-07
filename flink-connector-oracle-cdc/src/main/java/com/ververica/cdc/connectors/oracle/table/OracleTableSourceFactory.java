@@ -21,8 +21,8 @@ package com.ververica.cdc.connectors.oracle.table;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.ConfigOptions;
 import org.apache.flink.configuration.ReadableConfig;
+import org.apache.flink.table.api.TableSchema;
 import org.apache.flink.table.api.ValidationException;
-import org.apache.flink.table.catalog.ResolvedSchema;
 import org.apache.flink.table.connector.source.DynamicTableSource;
 import org.apache.flink.table.factories.DynamicTableSourceFactory;
 import org.apache.flink.table.factories.FactoryUtil;
@@ -109,7 +109,7 @@ public class OracleTableSourceFactory implements DynamicTableSourceFactory {
         String schemaName = config.get(SCHEMA_NAME);
         int port = config.get(PORT);
         StartupOptions startupOptions = getStartupOptions(config);
-        ResolvedSchema physicalSchema = context.getCatalogTable().getResolvedSchema();
+        TableSchema physicalSchema = context.getCatalogTable().getSchema();
 
         return new OracleTableSource(
                 physicalSchema,

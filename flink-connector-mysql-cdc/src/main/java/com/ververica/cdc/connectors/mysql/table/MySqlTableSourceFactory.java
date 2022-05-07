@@ -20,8 +20,8 @@ package com.ververica.cdc.connectors.mysql.table;
 
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.ReadableConfig;
+import org.apache.flink.table.api.TableSchema;
 import org.apache.flink.table.api.ValidationException;
-import org.apache.flink.table.catalog.ResolvedSchema;
 import org.apache.flink.table.connector.source.DynamicTableSource;
 import org.apache.flink.table.factories.DynamicTableSourceFactory;
 import org.apache.flink.table.factories.FactoryUtil;
@@ -36,6 +36,7 @@ import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.ververica.cdc.connectors.mysql.source.config.MySqlSourceOptions.CHUNK_META_GROUP_SIZE;
 import static com.ververica.cdc.connectors.mysql.source.config.MySqlSourceOptions.CONNECTION_POOL_SIZE;
@@ -91,8 +92,9 @@ public class MySqlTableSourceFactory implements DynamicTableSourceFactory {
         int fetchSize = config.get(SCAN_SNAPSHOT_FETCH_SIZE);
         ZoneId serverTimeZone = ZoneId.of(config.get(SERVER_TIME_ZONE));
 
-        ResolvedSchema physicalSchema =
-                getPhysicalSchema(context.getCatalogTable().getResolvedSchema());
+        TableSchema physicalSchema =
+                getPhysicalSchema(context.getCatalogTable().getSchema());
+
         String serverId = validateAndGetServerId(config);
         StartupOptions startupOptions = getStartupOptions(config);
         Duration connectTimeout = config.get(CONNECT_TIMEOUT);
@@ -220,7 +222,7 @@ public class MySqlTableSourceFactory implements DynamicTableSourceFactory {
         }
     }
 
-    private void validatePrimaryKeyIfEnableParallel(ResolvedSchema physicalSchema) {
+    private void validatePrimaryKeyIfEnableParallel(TableSchema physicalSchema) {
         if (!physicalSchema.getPrimaryKey().isPresent()) {
             throw new ValidationException(
                     String.format(
